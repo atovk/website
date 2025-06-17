@@ -39,7 +39,7 @@ jobs:
 
       # 步骤4：部署到 GitHub Pages
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@v3
         # 仅在推送到 main 分支时执行部署
         # 如果要改变分支名，也需要相应修改下面的 'refs/heads/main'
         # if: github.ref == 'refs/heads/main'
