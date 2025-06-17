@@ -1,0 +1,53 @@
+# GitHub Actions 工作流配置文件
+# 用于自动构建 Hugo 静态网站并部署到 GitHub Pages
+name: GitHub Pages
+
+# 定义触发工作流的条件
+on:
+  push:
+    branches:
+      - main  # 当推送到 main 分支时触发部署
+  pull_request:  # 当创建或更新 Pull Request 时触发（用于测试构建）
+
+# 定义作业
+jobs:
+  deploy:  # 部署作业
+    runs-on: ubuntu-22.04  # 使用 Ubuntu 22.04 运行环境
+    # 设置作业权限
+    permissions:
+      contents: write  # 允许写入仓库内容（用于推送生成的文件）
+    # 并发控制：确保同一分支的工作流不会并发运行
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    # 工作流步骤定义
+    steps:
+      # 步骤1：检出源代码
+      - uses: actions/checkout@v4
+        with:
+          submodules: true  # 获取一级子模块（如 Hugo 主题）（true: 只获取直接子模块，recursive: 递归获取所有嵌套子模块）
+          fetch-depth: 0    # 获取完整的 Git 历史记录（用于 .GitInfo 和 .Lastmod 功能）
+
+      # 步骤2：安装和设置 Hugo
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: 'latest'  # 使用最新版本的 Hugo
+
+      # 步骤3：构建静态网站
+      - name: Build
+        run: hugo --minify  # 使用 Hugo 构建网站并压缩输出文件
+
+      # 步骤4：部署到 GitHub Pages
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
+        # 仅在推送到 main 分支时执行部署
+        # 如果要改变分支名，也需要相应修改下面的 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
+        with:
+          # github_token: ${{ secrets.GITHUB_TOKEN }} 
+          # 上面这行适用于发布到源码相同仓库的情况，不能用于发布到其他仓库
+          external_repository: atovk/atovk.github.io  # 指定要发布到的目标仓库
+          personal_token: ${{ secrets.ACTION_ACCESS_TOKEN }}  # 发布到其他仓库需要提供个人访问令牌
+          publish_dir: ./public  # 指定要发布的文件夹内容（Hugo 默认生成到 public 文件夹）
+          publish_branch: master  # 指定发布到目标仓库的分支
+          commit_message: ${{ github.event.head_commit.message }}  # 使用源仓库的提交信息作为部署提交信息
