@@ -32,6 +32,8 @@ jobs:
         uses: peaceiris/actions-hugo@v2
         with:
           hugo-version: '0.147.8'  # 使用最新版本的 Hugo
+          # 是否启用 hugo extend
+          extended: true  # 启用 extended 版本（支持 Sass/SCSS 等功能）
 
       # 步骤3：构建静态网站
       - name: Build
