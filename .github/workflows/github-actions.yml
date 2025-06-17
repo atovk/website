@@ -31,7 +31,7 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: 'latest'  # 使用最新版本的 Hugo
+          hugo-version: '0.147.8'  # 使用最新版本的 Hugo
 
       # 步骤3：构建静态网站
       - name: Build
@@ -42,7 +42,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         # 仅在推送到 main 分支时执行部署
         # 如果要改变分支名，也需要相应修改下面的 'refs/heads/main'
-        # if: github.ref == 'refs/heads/main'
+        if: ${{ github.ref == 'refs/heads/main' }}
         with:
           # github_token: ${{ secrets.GITHUB_TOKEN }} 
           # 上面这行适用于发布到源码相同仓库的情况，不能用于发布到其他仓库
