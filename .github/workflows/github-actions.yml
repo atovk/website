@@ -49,7 +49,7 @@ jobs:
           # github_token: ${{ secrets.GITHUB_TOKEN }} 
           # 上面这行适用于发布到源码相同仓库的情况，不能用于发布到其他仓库
           external_repository: atovk/atovk.github.io  # 指定要发布到的目标仓库
-          personal_token: ${{ secrets.ACTION_ACCESS_TOKEN }}  # 发布到其他仓库需要提供个人访问令牌
+          personal_token: ${{ secrets.ACTIONS_DEPLOY_KEY }}  # 发布到其他仓库需要提供个人访问令牌
           publish_dir: ./public  # 指定要发布的文件夹内容（Hugo 默认生成到 public 文件夹）
           publish_branch: main  # 指定发布到目标仓库的分支
           commit_message: ${{ github.event.head_commit.message }}  # 使用源仓库的提交信息作为部署提交信息
