@@ -50,8 +50,8 @@ params:
     # disableHLJS: true # to disable highlight.js
     # disableFingerprinting: true
     favicon: "/favicon.ico"
-    favicon16x16: "/favicon16x16.png"
-    favicon32x32: "/favicon32x32.png"
+    favicon16x16: "/favicon-16x16.png"
+    favicon32x32: "/favicon-32x32.png"
     apple_touch_icon: "/apple-touch-icon.png"
     safari_pinned_tab: "/safari-pinned-tab.svg"
 
@@ -105,6 +105,13 @@ params:
     URL: "https://github.com/atovk/website/content"
     Text: "Suggest Changes" # edit text
     appendFilePath: true # to append file path to Edit link
+
+  gitment:
+    enabled: false # enable gitment comments
+    repository: "atovk/website" # your repository name
+    owner: "atovk" # your github username
+    clientId: "your_client_id" # your github client id
+    clientSecret: "your_client_secret" # your github client secret
 
   # for search
   # https://fusejs.io/api/options.html
