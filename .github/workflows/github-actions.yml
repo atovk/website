@@ -26,6 +26,15 @@ jobs:
         with:
           submodules: true  # 获取一级子模块（如 Hugo 主题）（true: 只获取直接子模块，recursive: 递归获取所有嵌套子模块）
           fetch-depth: 0    # 获取完整的 Git 历史记录（用于 .GitInfo 和 .Lastmod 功能）
+          token: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub token 来获取子模块
+
+      # 步骤1.5：手动处理子模块（如果自动获取失败）
+      - name: Setup Git for submodules
+        run: |
+          # 配置 git 使用 HTTPS 而不是 SSH 来获取子模块
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+          git submodule sync
+          git submodule update --init --recursive
 
       # 步骤2：安装和设置 Hugo
       - name: Setup Hugo
@@ -39,13 +48,50 @@ jobs:
       - name: Build
         run: hugo --minify  # 使用 Hugo 构建网站并压缩输出文件
 
-      # 步骤3.5：调试 - 检查构建后的文件
-      - name: Debug - List public directory contents
+      # 步骤3.5：调试 - 检查构建前后的文件
+      - name: Debug - Check source and build output
         run: |
+          echo "=== Hugo version ==="
+          hugo version
+          echo ""
+          echo "=== Git submodule status ==="
+          git submodule status
+          echo ""
+          echo "=== Check theme directory ==="
+          ls -la themes/
+          if [ -d "themes/PaperMod" ]; then
+            echo "PaperMod theme exists"
+            ls -la themes/PaperMod/
+            echo ""
+            echo "=== Theme static directory ==="
+            if [ -d "themes/PaperMod/static" ]; then
+              find themes/PaperMod/static -type f | head -20
+            else
+              echo "No static directory in theme"
+            fi
+          else
+            echo "PaperMod theme directory not found!"
+          fi
+          echo ""
+          echo "=== Source static directory ==="
+          if [ -d "./static" ]; then
+            find ./static -type f | head -20
+          else
+            echo "No static directory found"
+          fi
+          echo ""
+          echo "=== Source assets directory ==="
+          if [ -d "./assets" ]; then
+            find ./assets -type f | head -20
+          else
+            echo "No assets directory found"
+          fi
+          echo ""
           echo "=== Public directory structure ==="
           ls -la ./public/
+          echo ""
           echo "=== Image files in public ==="
-          find ./public -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.gif" -o -name "*.svg" -o -name "*.webp" | head -10
+          find ./public -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.gif" -o -name "*.svg" -o -name "*.webp" | head -20
 
       # 步骤4：部署到 GitHub Pages
       - name: Deploy
