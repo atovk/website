@@ -27,14 +27,6 @@ jobs:
           submodules: true  # 获取一级子模块（如 Hugo 主题）（true: 只获取直接子模块，recursive: 递归获取所有嵌套子模块）
           fetch-depth: 0    # 获取完整的 Git 历史记录（用于 .GitInfo 和 .Lastmod 功能）
 
-      # 步骤1.5：手动处理子模块（如果自动获取失败）
-      - name: Setup Git for submodules
-        run: |
-          # 配置 git 使用 HTTPS 而不是 SSH 来获取子模块
-          git config --global url."https://github.com/".insteadOf "git@github.com:"
-          git submodule sync
-          git submodule update --init --recursive
-
       # 步骤2：安装和设置 Hugo
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
