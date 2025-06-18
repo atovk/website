@@ -39,6 +39,14 @@ jobs:
       - name: Build
         run: hugo --minify  # 使用 Hugo 构建网站并压缩输出文件
 
+      # 步骤3.5：调试 - 检查构建后的文件
+      - name: Debug - List public directory contents
+        run: |
+          echo "=== Public directory structure ==="
+          ls -la ./public/
+          echo "=== Image files in public ==="
+          find ./public -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.gif" -o -name "*.svg" -o -name "*.webp" | head -10
+
       # 步骤4：部署到 GitHub Pages
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
