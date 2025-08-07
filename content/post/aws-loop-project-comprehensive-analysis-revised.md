@@ -8,7 +8,7 @@ categories: ["技术分享", "面试准备", "架构设计"]
 author: "atovk"
 showToc: true
 TocOpen: false
-draft: false
+draft: true
 hidemeta: false
 comments: true
 description: "基于 STAR-C 法则深度拆解 AWS Loop 面试项目案例，涵盖云原生数据平台架构、AI 智能应用、大数据处理等多个技术领域的实践经验和架构设计思考。"
