@@ -1,3 +1,4 @@
 [submodule "themes/PaperMod"]
 	path = themes/PaperMod
 	url = https://github.com/atovk/hugo-PaperMod.git
+	branch = master  # 明确指定跟踪 master 分支
